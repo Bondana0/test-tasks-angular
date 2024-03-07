@@ -1,0 +1,132 @@
+<!-- <p>common works!</p> -->
+
+<style>
+  /* .td-table-id {
+  }
+  .td-table-user {
+  }
+  .td-table-issuance {
+  }
+  .td-table-return {
+  }
+  .td-table-actual {
+  }
+  .td-table-body {
+  }
+  .td-table-percent {
+  } */
+
+  /* div {
+    width: 700px;
+  } */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  td {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  td:nth-child(1),
+  td:nth-child(2),
+  td:nth-child(3),
+  td:nth-child(4),
+  td:nth-child(5),
+  td:nth-child(6),
+  td:nth-child(7) {
+    width: 24.28%;
+    font-size: small;
+  }
+</style>
+<!-- <button (click)="filterData($event)">Фільтрувати за періодом дат видачі</button>
+<input
+  type="date"
+  id="start"
+  name="start-date"
+  value="startDate"
+  (change)="onStartDateChange($event)"
+/>
+<input
+  type="date"
+  id="end"
+  name="end-date"
+  value="endDate"
+  (change)="onStartDateChange($event)"
+/> -->
+
+<!--  -->
+
+<!-- <button>Фільтрувати за періодом дат повернення кредиту</button>
+<ul>
+  <div>
+    <table>
+      <tr *ngFor="let data of commonData">
+        <td class="td-table-id">{{ data.id }}</td>
+        <td class="td-table-user">{{ data.user }}</td>
+        <td class="td-table-issuance">{{ data.issuance_date }}</td>
+        <td class="td-table-return">{{ data.return_date }}</td>
+        <td class="td-table-actual">{{ data.actual_return_date }}</td>
+        <td class="td-table-body">{{ data.body }}</td>
+        <td class="td-table-percent">{{ data.percent }}</td>
+      </tr>
+    </table>
+  </div>
+</ul> -->
+
+<!--  -->
+<!-- <button (click)="filterData($event)">Фільтрувати за періодом дат видачі</button> -->
+<label for="start">Фільтрувати за періодом дат видачі</label>
+<input
+  type="date"
+  id="start"
+  name="start-date"
+  value="startDate"
+  (change)="onStartDateChange($event)"
+/>
+<input
+  type="date"
+  id="end"
+  name="end-date"
+  value="endDate"
+  (change)="onEndDateChange($event)"
+/>
+
+<!-- <button (click)="(filterActual)">
+  Фільтрувати за періодом дат повернення кредиту
+</button>
+<input
+  type="date"
+  id="start"
+  name="start-date"
+  value="startDate"
+  (change)="onStartDateChange($event)"
+/>
+<input
+  type="date"
+  id="end"
+  name="end-date"
+  value="endDate"
+  (change)="onEndDateChange($event)"
+/> -->
+
+<ul>
+  <div>
+    <table>
+      <tr *ngFor="let data of filteredData; filter: filterActual">
+        <td class="td-table-id">{{ data.id }}</td>
+        <td class="td-table-user">{{ data.user }}</td>
+        <td class="td-table-issuance">{{ data.issuance_date }}</td>
+        <td class="td-table-return">{{ data.return_date }}</td>
+        <td class="td-table-actual">{{ data.actual_return_date }}</td>
+        <td class="td-table-body">{{ data.body }}</td>
+        <td class="td-table-percent">{{ data.percent }}</td>
+      </tr>
+    </table>
+  </div>
+</ul>
