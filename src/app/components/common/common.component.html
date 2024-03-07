@@ -1,24 +1,4 @@
-<!-- <p>common works!</p> -->
-
 <style>
-  /* .td-table-id {
-  }
-  .td-table-user {
-  }
-  .td-table-issuance {
-  }
-  .td-table-return {
-  }
-  .td-table-actual {
-  }
-  .td-table-body {
-  }
-  .td-table-percent {
-  } */
-
-  /* div {
-    width: 700px;
-  } */
   table {
     width: 100%;
     border-collapse: collapse;
@@ -43,82 +23,100 @@
     width: 24.28%;
     font-size: small;
   }
+  button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  button:hover {
+    background-color: #d32f2f;
+  }
+  /*  */
+
+  .form-control {
+    display: block;
+    width: 100%;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+
+  .form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+
+  .form-control::placeholder {
+    color: #6c757d;
+    opacity: 1;
+  }
+  /*  */
 </style>
-<!-- <button (click)="filterData($event)">Фільтрувати за періодом дат видачі</button>
+
+<button class="clear-button" (click)="clearFillters()">Очистити фільтр</button>
 <input
-  type="date"
-  id="start"
-  name="start-date"
-  value="startDate"
-  (change)="onStartDateChange($event)"
+  type="text"
+  ngxDaterangepickerMd
+  [(ngModel)]="issuanceDatePerioud"
+  placeholder="Фільтрувати за періодом дат видачі"
+  (change)="onChangeIssuanceDatePerioud($event)"
+  class="form-control"
+  startKey="startDate"
+  endKey="endDate"
+  name="daterangeIssuance"
+  [locale]="{ applyLabel: 'ok', format: 'DD-MM-YYYY' }"
 />
 <input
-  type="date"
-  id="end"
-  name="end-date"
-  value="endDate"
-  (change)="onStartDateChange($event)"
-/> -->
-
-<!--  -->
-
-<!-- <button>Фільтрувати за періодом дат повернення кредиту</button>
-<ul>
-  <div>
-    <table>
-      <tr *ngFor="let data of commonData">
-        <td class="td-table-id">{{ data.id }}</td>
-        <td class="td-table-user">{{ data.user }}</td>
-        <td class="td-table-issuance">{{ data.issuance_date }}</td>
-        <td class="td-table-return">{{ data.return_date }}</td>
-        <td class="td-table-actual">{{ data.actual_return_date }}</td>
-        <td class="td-table-body">{{ data.body }}</td>
-        <td class="td-table-percent">{{ data.percent }}</td>
-      </tr>
-    </table>
-  </div>
-</ul> -->
-
-<!--  -->
-<!-- <button (click)="filterData($event)">Фільтрувати за періодом дат видачі</button> -->
-<label for="start">Фільтрувати за періодом дат видачі</label>
-<input
-  type="date"
-  id="start"
-  name="start-date"
-  value="startDate"
-  (change)="onStartDateChange($event)"
-/>
-<input
-  type="date"
-  id="end"
-  name="end-date"
-  value="endDate"
-  (change)="onEndDateChange($event)"
+  type="text"
+  ngxDaterangepickerMd
+  [(ngModel)]="actualReturnDatePerioud"
+  placeholder="Фільтрувати за періодом дат повернення кредиту"
+  (change)="onChangeActualReturnDatePerioud($event)"
+  class="form-control"
+  startKey="startDate"
+  endKey="endDate"
+  name="daterangeaActual"
+  [locale]="{ applyLabel: 'ok', format: 'DD-MM-YYYY' }"
 />
 
-<!-- <button (click)="(filterActual)">
-  Фільтрувати за періодом дат повернення кредиту
+<button
+  type="text"
+  ngxDaterangepickerMd
+  placeholder="Прострочені кредити"
+  (click)="onApplyOverdueLoan()"
+  class="form-control"
+  startKey="startDate"
+  endKey="endDate"
+  name="daterangeaReturn"
+  value="returnDatePerriod"
+>
+  {{ !returnDatePerriod ? "Прострочена заборгованість" : "Вся заборгованість" }}
 </button>
-<input
-  type="date"
-  id="start"
-  name="start-date"
-  value="startDate"
-  (change)="onStartDateChange($event)"
-/>
-<input
-  type="date"
-  id="end"
-  name="end-date"
-  value="endDate"
-  (change)="onEndDateChange($event)"
-/> -->
 
 <ul>
   <div>
     <table>
-      <tr *ngFor="let data of filteredData; filter: filterActual">
+      <tr *ngFor="let data of finalData">
         <td class="td-table-id">{{ data.id }}</td>
         <td class="td-table-user">{{ data.user }}</td>
         <td class="td-table-issuance">{{ data.issuance_date }}</td>

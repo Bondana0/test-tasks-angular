@@ -1,6 +1,8 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { CommonService } from '../../common.service';
 import { NgFor } from '@angular/common';
+import { FormsModule } from '@angular/forms'; 
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 
 interface CommonDataItem {
   actual_return_date: string;
@@ -11,82 +13,89 @@ interface CommonDataItem {
   return_date: string;
   user: string;
 }
+
+interface DateRange {
+  startDate: Date;
+  endDate: Date;
+}
 @Component({
   selector: 'app-common',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor, FormsModule, NgxDaterangepickerMd],
   templateUrl: './common.component.html',
   styleUrl: './common.component.css',
 })
   
 export class CommonComponent implements OnInit {
   commonData: CommonDataItem[] = [];
-  // 
-  filteredData: CommonDataItem[] = [];
-  // 
-  
-  startDate: Date = new Date();
-  endDate: Date = new Date();
+  finalData: CommonDataItem[] = [];
+  issuanceDatePerioud?: DateRange;
+  actualReturnDatePerioud?: DateRange;
+  returnDatePerriod: boolean = false;
 
   constructor(private commonService: CommonService, public element: ElementRef) { }  
 
   ngOnInit() {        
-
     this.fetchCommonData();
   }
-  ngAfterViewInit() {
-    var div = this.element.nativeElement.querySelectorAll('input');
-
-    div[0].click()
-    console.log(div, 'ddd')
-  }
-fetchCommonData(): void {
-  this.commonService.getCommonData().subscribe((data: any) => {
-    console.log(data);
+  
+  fetchCommonData(): void {
+    this.commonService.getCommonData().subscribe((data: any) => {
     this.commonData = data;
-    // 
-    this.filteredData = data;
-    // 
-  });
-}
-
-
-  filterData(event: any): void {
-  // this.filteredData = this.commonData.filter(item => this.filterItem(item) && this.filterActual(item));
-   this.filteredData = this.commonData.filter(item => this.filterItem(item));
-  //  this.filteredData = this.filteredData.filter(item => this.filterActual(item));
+    this.filteredData()
+    });
+  }
+ 
+  onChangeIssuanceDatePerioud(event: any) {
+    this.issuanceDatePerioud = event;
+    this.filteredData();
   }
 
-
-
-onStartDateChange(event: any) {
-  this.startDate = new Date(event.target.value);
-}
-
-onEndDateChange(event: any) {
-  this.endDate = new Date(event.target.value);
-}
-
- filterItem(item: CommonDataItem): boolean {
-    const issuanceDate = new Date(item.issuance_date);
-
-    if (this.endDate && this.startDate) {
-      return issuanceDate >= this.startDate && issuanceDate <= this.endDate;
-    }
-
-    return true;
-  } 
-
-
-  filterActual(item: CommonDataItem): boolean {
-  const actualDate = new Date(item.actual_return_date);
-
-  if (this.endDate && this.startDate) {
-    return actualDate >= this.startDate && actualDate <= this.endDate;
+  onChangeActualReturnDatePerioud(event: any) {
+    this.actualReturnDatePerioud = event;
+    this.filteredData();
   }
 
-  return true;
-}
+  onApplyOverdueLoan() {
+    this.returnDatePerriod = !this.returnDatePerriod;
+    this.filteredData();
+  }
 
+  clearFillters() {
+    this.actualReturnDatePerioud = undefined;
+    this.issuanceDatePerioud = undefined;
+    this.returnDatePerriod = false;
+    this.filteredData();
+  }
+
+  filteredData() {
+    this.finalData = this.commonData.filter((item) => {
+      const issuanceDate = new Date(item.issuance_date);
+      if (this.issuanceDatePerioud?.endDate && this.issuanceDatePerioud.startDate) {
+    
+        return issuanceDate >= this.issuanceDatePerioud.startDate && issuanceDate <= this.issuanceDatePerioud.endDate;
+        
+      }
+      return true;
+    }).filter((item) => {
+      const actualDate = new Date(item.actual_return_date);
+      if (this.actualReturnDatePerioud?.endDate && this.actualReturnDatePerioud.startDate) {
+    
+        return actualDate >= this.actualReturnDatePerioud.startDate && actualDate <= this.actualReturnDatePerioud.endDate;
+    
+      }
+      return true;
+    })
+      .filter((item) => {
+        if (this.returnDatePerriod) {
+          const returnDate = new Date(item.return_date)
+          const today = new Date();
+          return !item.actual_return_date || new Date(item.actual_return_date) > returnDate || returnDate > today;
+        }
+        
+        return true;
+    })
+
+  }
   
 }

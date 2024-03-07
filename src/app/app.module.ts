@@ -8,9 +8,9 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-// import { MyFilterPipe } from './my.filter.pipe';
 
-//I keep the new line
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -22,7 +22,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     AppRoutingModule,
     HttpClientModule,
     CommonModule,
-    NgFor
+    NgFor,
+    NgxDaterangepickerMd.forRoot()
   ],
 
   bootstrap: [AppComponent],

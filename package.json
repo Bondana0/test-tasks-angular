@@ -24,6 +24,7 @@
     "angular-in-memory-web-api": "^0.17.0",
     "bootstrap": "^5.3.3",
     "fflate": "^0.8.1",
+    "ngx-daterangepicker-material": "^6.0.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
