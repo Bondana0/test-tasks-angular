@@ -2,12 +2,26 @@
   <div class="panel-heading">
     <h3 class="panel-title">Загальна інформація</h3>
   </div>
+  <mat-form-field>
+    <mat-label>Month and Year</mat-label>
+    <input matInput [matDatepicker]="dp" [formControl]="date" />
+    <mat-hint>MM/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+    <mat-datepicker
+      #dp
+      startView="multi-year"
+      (monthSelected)="setMonthAndYear($event, dp)"
+      panelClass="example-month-picker"
+    >
+    </mat-datepicker>
+  </mat-form-field>
+
   <div class="panel-body">
     <ul>
       <li>Загальна кількість виданих кредитів: {{ totalLoans }}</li>
       <li>Середня сума виданих кредитів: {{ averageAmount }} грн.</li>
       <li>Загальна сума виданих кредитів: {{ totalSum }} грн.</li>
-      <li>Загальна сума нарахованих відсотків: {{ totalInterest }} %</li>
+      <li>Загальна сума нарахованих відсотків: {{ totalInterest }} грн.</li>
       <li>Загальна кількість повернених кредитів: {{ totalReturnedLoans }}</li>
     </ul>
   </div>

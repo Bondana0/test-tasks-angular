@@ -1,11 +1,11 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
-import { DataService } from '../../data.service';
 import { NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { TimePeriod } from 'ngx-daterangepicker-material/daterangepicker.component'
 import dayjs from 'dayjs';
 
+import { DataService } from '../../data.service';
 import { LoanData } from '../../types/data';
 
 @Component({
