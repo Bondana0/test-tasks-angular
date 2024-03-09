@@ -63,10 +63,10 @@ export class CommonComponent implements OnInit {
   }
 
   clearFillters() {
-    this.actualReturnDatePerioud = undefined;
-    this.issuanceDatePerioud = undefined;
+    this.findDateRagne();
     this.returnDatePerriod = false;
     this.filteredData();
+    
   }
 
   filteredData() {
