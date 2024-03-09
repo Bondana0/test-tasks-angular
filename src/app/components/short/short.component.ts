@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonService } from '../../common.service';
+
+import { DataService } from '../../data.service';
+import { LoanData } from '../../types/data';
+
 
 @Component({
   selector: 'app-short',
@@ -14,33 +17,30 @@ export class ShortComponent implements OnInit {
   totalReturnedLoans: number = 0;
 
   
-  constructor(private apiService: CommonService) {}
+  constructor(private apiService: DataService) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.apiService.getCommonData().subscribe(data => {
       this.calculateLoansByMonth(data);
       this.calculateAverageAmount(data);
       this.calculateTotalSum(data);
-      // this.calculateTotalInterest(data);
       this.calculateTotalReturnedLoans(data);
     });
   }
 
-    private calculateLoansByMonth(data: any[]): void {
+  private calculateLoansByMonth(data: LoanData[]) {
     this.totalLoans = data.length;
     }
   
-  private calculateAverageAmount(data: any[]): void {
+  private calculateAverageAmount(data: LoanData[]) {
     const sum = data.reduce((acc, loan) => acc + loan.body, 0);
     this.averageAmount = sum / data.length;
   }
-  private calculateTotalSum(data: any[]): void {
+  private calculateTotalSum(data: LoanData[]) {
     this.totalSum = data.reduce((acc, loan) => acc + loan.body, 0);
   }
-  // private calculateTotalInterest(data: any[]): void {
-  //   this.totalInterest = data.reduce((total, loan) => total + loan.percent, 0);
-  // }
-    private calculateTotalReturnedLoans(data: any[]): void {
+ 
+    private calculateTotalReturnedLoans(data: LoanData[]) {
     this.totalReturnedLoans = data.filter(loan => loan.actual_return_date !== null).length;
   }
 

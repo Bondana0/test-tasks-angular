@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { LoanData } from './types/data';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CommonService {
+export class DataService {
   url = 'https://raw.githubusercontent.com/LightOfTheSun/front-end-coding-task-db/master/db.json';
 
   constructor(private http: HttpClient) {}
-  getCommonData(): Observable<any> {
-    return this.http.get(this.url, { headers: { Accept: 'application/json' } });
-  }
-  ngOnInit() { 
-    console.log('ngOnInit')
+  getCommonData(): Observable<LoanData[]> {
+    return this.http.get<LoanData[]>(this.url, { headers: { Accept: 'application/json' } });
   }
 }
 

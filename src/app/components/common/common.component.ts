@@ -1,23 +1,13 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
-import { CommonService } from '../../common.service';
+import { DataService } from '../../data.service';
 import { NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import { TimePeriod } from 'ngx-daterangepicker-material/daterangepicker.component'
+import dayjs from 'dayjs';
 
-interface CommonDataItem {
-  actual_return_date: string;
-  body: number;
-  id: number;
-  issuance_date: string;
-  percent: number;
-  return_date: string;
-  user: string;
-}
+import { LoanData } from '../../types/data';
 
-interface DateRange {
-  startDate: Date;
-  endDate: Date;
-}
 @Component({
   selector: 'app-common',
   standalone: true,
@@ -27,31 +17,41 @@ interface DateRange {
 })
   
 export class CommonComponent implements OnInit {
-  commonData: CommonDataItem[] = [];
-  finalData: CommonDataItem[] = [];
-  issuanceDatePerioud?: DateRange;
-  actualReturnDatePerioud?: DateRange;
+  commonData: LoanData[] = [];
+  finalData: LoanData[] = [];
+  issuanceDatePerioud?: TimePeriod | null;
+  actualReturnDatePerioud?: TimePeriod | null;
   returnDatePerriod: boolean = false;
 
-  constructor(private commonService: CommonService, public element: ElementRef) { }  
+  constructor(private commonService: DataService, public element: ElementRef) { }  
 
   ngOnInit() {        
     this.fetchCommonData();
   }
   
-  fetchCommonData(): void {
-    this.commonService.getCommonData().subscribe((data: any) => {
+  fetchCommonData() {
+    this.commonService.getCommonData().subscribe((data) => {
     this.commonData = data;
     this.filteredData()
     });
   }
+
+  findDateRagne() {
+    const initDateRange: TimePeriod = {
+      startDate: dayjs(Math.min(...this.commonData.map(loan => +dayjs(loan.issuance_date)))),
+      endDate: dayjs(),
+    };
+    this.issuanceDatePerioud = initDateRange;
+    this.actualReturnDatePerioud = initDateRange;
+  }
  
-  onChangeIssuanceDatePerioud(event: any) {
+  
+  onChangeIssuanceDatePerioud(event: TimePeriod | null) {
     this.issuanceDatePerioud = event;
     this.filteredData();
   }
 
-  onChangeActualReturnDatePerioud(event: any) {
+  onChangeActualReturnDatePerioud(event?: TimePeriod | null) {
     this.actualReturnDatePerioud = event;
     this.filteredData();
   }
@@ -69,16 +69,17 @@ export class CommonComponent implements OnInit {
   }
 
   filteredData() {
+  
     this.finalData = this.commonData.filter((item) => {
-      const issuanceDate = new Date(item.issuance_date);
-      if (this.issuanceDatePerioud?.endDate && this.issuanceDatePerioud.startDate) {
+      const issuanceDate = dayjs(item.issuance_date);
     
+      if (this.issuanceDatePerioud?.endDate && this.issuanceDatePerioud.startDate) {
         return issuanceDate >= this.issuanceDatePerioud.startDate && issuanceDate <= this.issuanceDatePerioud.endDate;
         
       }
       return true;
     }).filter((item) => {
-      const actualDate = new Date(item.actual_return_date);
+      const actualDate = dayjs(item.actual_return_date);
       if (this.actualReturnDatePerioud?.endDate && this.actualReturnDatePerioud.startDate) {
     
         return actualDate >= this.actualReturnDatePerioud.startDate && actualDate <= this.actualReturnDatePerioud.endDate;
@@ -88,9 +89,9 @@ export class CommonComponent implements OnInit {
     })
       .filter((item) => {
         if (this.returnDatePerriod) {
-          const returnDate = new Date(item.return_date)
-          const today = new Date();
-          return !item.actual_return_date || new Date(item.actual_return_date) > returnDate || returnDate > today;
+          const returnDate = dayjs(item.return_date);
+          const today = dayjs();
+          return dayjs(item.actual_return_date) > returnDate || !item.actual_return_date && returnDate < today;
         }
         
         return true;
