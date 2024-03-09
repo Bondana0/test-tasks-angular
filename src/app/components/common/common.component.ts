@@ -33,6 +33,7 @@ export class CommonComponent implements OnInit {
     this.commonService.getCommonData().subscribe((data) => {
     this.commonData = data;
     this.filteredData()
+    this.findDateRagne();
     });
   }
 
